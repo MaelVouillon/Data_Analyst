@@ -5,6 +5,7 @@ import { ChatInterface } from './components/ChatInterface';
 import { DataPreview } from './components/DataPreview';
 import { Analytics } from './components/Analytics';
 import { useDataStore } from './hooks/useDataStore';
+import { UserWorkflow } from './components/UserWorkflow';
 
 const App: React.FC = () => {
   const { activeDataset } = useDataStore();
@@ -21,6 +22,12 @@ const App: React.FC = () => {
                 Upload Your Data
               </h2>
               <FileUpload />
+            </div>
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                Manage Your Workflows
+              </h2>
+              <UserWorkflow />
             </div>
             
             {activeDataset && (
@@ -41,3 +48,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+
