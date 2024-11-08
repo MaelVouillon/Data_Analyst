@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BarChart2, Settings, History } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { HistorySidebar } from './HistorySidebar';
 
 export const Header: React.FC = () => {
@@ -16,6 +17,12 @@ export const Header: React.FC = () => {
             </div>
             
             <div className="flex space-x-2">
+              <Link
+                to="/workflows"
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <BarChart2 className="h-5 w-5 text-gray-600" />
+              </Link>
               <button
                 onClick={() => setIsHistoryOpen(true)}
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -34,3 +41,4 @@ export const Header: React.FC = () => {
     </>
   );
 };
+
