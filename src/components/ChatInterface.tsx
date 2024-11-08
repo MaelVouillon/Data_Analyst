@@ -21,6 +21,7 @@ export const ChatInterface: React.FC = () => {
     const userMessage = input;
     setInput('');
     saveMessage(userMessage, true);
+
     setIsLoading(true);
 
     try {
@@ -125,7 +126,7 @@ export const ChatInterface: React.FC = () => {
                   </button>
                 </div>
               </div>
-              <div className="h-[400px] w-full">
+              <div className="h-[500px] w-full">
                 <ChartView config={currentChart} />
               </div>
             </div>

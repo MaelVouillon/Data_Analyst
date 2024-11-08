@@ -10,6 +10,7 @@ export const DataPreview: React.FC = () => {
   const { datasets, activeDataset } = useDataStore();
   const [currentPage, setCurrentPage] = useState(0);
   const ROWS_PER_PAGE = 10;
+  const VISIBLE_ROWS = 7;
 
   const currentDataset = datasets.find((ds) => ds.id === activeDataset);
   if (!currentDataset?.data) return null;
@@ -30,7 +31,7 @@ export const DataPreview: React.FC = () => {
 
   const getCurrentSheetData = (sheetName: string) => {
     if (currentDataset.type === 'excel' && typeof currentDataset.data === 'object') {
-      return getSheetData(currentDataset.data[sheetName]);
+      return currentDataset.data[sheetName] || [];
     }
     return getSheetData(currentDataset.data);
   };
@@ -74,17 +75,19 @@ export const DataPreview: React.FC = () => {
       </div>
 
       <Tabs>
-        <TabList className="flex border-b border-gray-200 mb-4">
-          {sheets.map((sheet) => (
-            <Tab
-              key={sheet}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800 cursor-pointer border-b-2 border-transparent hover:border-gray-300 focus:outline-none"
-              selectedClassName="text-indigo-600 border-indigo-600"
-            >
-              {sheet}
-            </Tab>
-          ))}
-        </TabList>
+        <div className="overflow-x-auto">
+          <TabList className="flex border-b border-gray-200 mb-4">
+            {sheets.map((sheet) => (
+              <Tab
+                key={sheet}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 cursor-pointer border-b-2 border-transparent hover:border-gray-300 focus:outline-none"
+                selectedClassName="text-indigo-600 border-indigo-600"
+              >
+                {sheet}
+              </Tab>
+            ))}
+          </TabList>
+        </div>
 
         {sheets.map((sheet) => {
           const data = getCurrentSheetData(sheet);
@@ -115,40 +118,42 @@ export const DataPreview: React.FC = () => {
                     className="flex items-center space-x-1 px-3 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700"
                   >
                     <Download className="h-4 w-4" />
-                    <span>Export</span>
+                    <span>Excel</span>
                   </button>
                 </div>
               </div>
 
               <div className="overflow-x-auto border border-gray-200 rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      {columns.map((column) => (
-                        <th
-                          key={column}
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          {column}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {currentPageData.map((row, rowIndex) => (
-                      <tr key={rowIndex} className="hover:bg-gray-50">
+                <div className="overflow-y-auto max-h-96">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
                         {columns.map((column) => (
-                          <td
-                            key={`${rowIndex}-${column}`}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                          <th
+                            key={column}
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                           >
-                            {String(row[column])}
-                          </td>
+                            {column}
+                          </th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {currentPageData.slice(0, VISIBLE_ROWS).map((row: any, rowIndex: number) => (
+                        <tr key={rowIndex} className="hover:bg-gray-50">
+                          {columns.map((column) => (
+                            <td
+                              key={`${rowIndex}-${column}`}
+                              className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                            >
+                              {String(row[column])}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {totalPages > 1 && (

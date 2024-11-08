@@ -14,11 +14,11 @@ import { utils, write } from 'xlsx';
 import { saveAs } from 'file-saver';
 import { Download, Copy, FileText } from 'lucide-react';
 
+const COLORS = ['#6366f1', '#8b5cf6', '#d946ef', '#ec4899', '#f43f5e'];
+
 interface ChartViewProps {
   config: ChartConfig;
 }
-
-const COLORS = ['#6366f1', '#8b5cf6', '#d946ef', '#ec4899', '#f43f5e'];
 
 export const ChartView: React.FC<ChartViewProps> = ({ config }) => {
   const { type, data, title } = config;
@@ -108,7 +108,7 @@ export const ChartView: React.FC<ChartViewProps> = ({ config }) => {
             />
             <YAxis />
             <Tooltip />
-            <Line 
+            <Line
               type="monotone" 
               dataKey="value" 
               stroke="#6366f1" 
